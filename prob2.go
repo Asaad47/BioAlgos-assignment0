@@ -38,10 +38,15 @@ func findIfSingleMismatch(pattern, queue string) bool {
 }
 
 // finds pattern in sequence with an additional character, so length of sequence is len(pattern) + 1
+// both pattern and queue must start and end with the same characters to be considered a match
 func findIfAdditionalChar(pattern, queue string) bool {
 	if len(queue) < len(pattern)+1 {
 		return false
 	}
+	if unicode.ToLower(rune(queue[0])) != unicode.ToLower(rune(pattern[0])) {
+		return false
+	}
+
 	firstMismatch := -1
 	out := true
 	for i := 0; i < len(pattern); i++ {
@@ -111,6 +116,8 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 
 	fmt.Println("Pattern:", pattern)
 	fmt.Println("Length of pattern:", len(pattern))
+	fmt.Println("Starting sequence file processing: ", seqFileName)
+	fmt.Println("-----------------------------------")
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error reading pattern file:", err)
@@ -127,45 +134,37 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 
 	numExactMatches := 0
 	chromosome := ""
-	// validChromosome := false
 	start := 0
 	queue := ""
 	headers := 0
 	numSingleMismatches := 0
 	numAdditionalCharMatches := 0
 	numMissingCharMatches := 0
+	foundExactMatch := false
 
 	scanner = bufio.NewScanner(seqFile)
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, ">") {
-			fmt.Println("Header:", line)
-			// fmt.Println("-- Number of matches so far:", numMatches)
+			// fmt.Println("Header:", line)
 			start = 0
 			queue = ""
-			chromosomeParts := strings.Split(line, "chromosome ")
-			if len(chromosomeParts) > 1 {
-				chromosome = chromosomeParts[1]
-				// validChromosome = true
-			} else {
-				chromosome = chromosomeParts[0]
-				// validChromosome = false
-			}
+			chromosome = line
 			headers++
 		} else {
-			// if !validChromosome {
-			// 	continue
-			// }
-			// if headers > 1 {
-			// 	break
-			// }
 			queue += strings.TrimSpace(line)
-			// fmt.Println("line: ", line)
 
 			for len(queue) >= len(pattern) {
+				if !foundExactMatch && findIfMissingChar(pattern, queue) { // to avoid counting duplicates
+					numMissingCharMatches++
+					fmt.Printf("Missing character: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern)-2)
+				}
+				foundExactMatch = false
+
 				if findIfExactMatch(pattern, queue) {
 					numExactMatches++
-					fmt.Printf("Matched: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern)-1)
+					fmt.Printf("Exact match: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern)-1)
+					foundExactMatch = true
 				}
 				if findIfSingleMismatch(pattern, queue) {
 					numSingleMismatches++
@@ -173,11 +172,7 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 				}
 				if findIfAdditionalChar(pattern, queue) {
 					numAdditionalCharMatches++
-					fmt.Printf("Additional character: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern)+1)
-				}
-				if findIfMissingChar(pattern, queue) {
-					numMissingCharMatches++
-					fmt.Printf("Missing character: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern)-2)
+					fmt.Printf("Additional character: (chromosome, start, end) = (%s, %d, %d)\n", chromosome, start, start+len(pattern))
 				}
 
 				queue = queue[1:]
@@ -194,5 +189,13 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 }
 
 func main() {
-	fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt"))
+	// fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt")) // this is for testing
+
+	aluFilePath := "DF000000002.fa"
+
+	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
+	fmt.Println("** Total mismatches: ", findNumMisMatches(t2tFilePath, aluFilePath))
+
+	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
+	fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath))
 }
