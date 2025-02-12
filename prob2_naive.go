@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"unicode"
 )
 
 // queue must be at least longer than pattern
 func findIfExactMatch(pattern, queue string) bool {
 	matched := true
 	for i := 0; i < len(pattern); i++ {
-		if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i])) {
+		if queue[i] != pattern[i] {
 			matched = false
 			break
 		}
@@ -24,7 +23,7 @@ func findIfExactMatch(pattern, queue string) bool {
 func findIfSingleMismatch(pattern, queue string) bool {
 	mismatchCount := 0
 	for i := 0; i < len(pattern); i++ {
-		if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i])) {
+		if queue[i] != pattern[i] {
 			mismatchCount++
 			if mismatchCount > 1 {
 				break
@@ -43,7 +42,7 @@ func findIfAdditionalChar(pattern, queue string) bool {
 	if len(queue) < len(pattern)+1 {
 		return false
 	}
-	if unicode.ToLower(rune(queue[0])) != unicode.ToLower(rune(pattern[0])) {
+	if queue[0] != pattern[0] {
 		return false
 	}
 
@@ -52,11 +51,11 @@ func findIfAdditionalChar(pattern, queue string) bool {
 	for i := 0; i < len(pattern); i++ {
 
 		if firstMismatch == -1 {
-			if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i])) {
+			if queue[i] != pattern[i] {
 				firstMismatch = i
 			}
 		} else {
-			if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i-1])) {
+			if queue[i] != pattern[i-1] {
 				out = false
 				break
 			}
@@ -65,7 +64,7 @@ func findIfAdditionalChar(pattern, queue string) bool {
 	if firstMismatch == -1 {
 		return false
 	} else {
-		if unicode.ToLower(rune(queue[len(pattern)])) != unicode.ToLower(rune(pattern[len(pattern)-1])) {
+		if queue[len(pattern)] != pattern[len(pattern)-1] {
 			out = false
 		}
 		return out
@@ -78,11 +77,11 @@ func findIfMissingChar(pattern, queue string) bool {
 	out := true
 	for i := 0; i < len(pattern); i++ {
 		if firstMismatch == -1 {
-			if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i])) {
+			if queue[i] != pattern[i] {
 				firstMismatch = i
 			}
 		} else {
-			if unicode.ToLower(rune(queue[i-1])) != unicode.ToLower(rune(pattern[i])) {
+			if queue[i-1] != pattern[i] {
 				out = false
 				break
 			}
@@ -110,7 +109,7 @@ func findNumMisMatches(seqFileName, patternFileName string, printHeaders bool) i
 		if strings.HasPrefix(line, ">") {
 			fmt.Println("Pattern-- Header:", line)
 		} else {
-			pattern += strings.TrimSpace(line)
+			pattern += strings.ToLower(strings.TrimSpace(line))
 		}
 	}
 
@@ -154,7 +153,7 @@ func findNumMisMatches(seqFileName, patternFileName string, printHeaders bool) i
 			chromosome = line
 			headers++
 		} else {
-			queue += strings.TrimSpace(line)
+			queue += strings.ToLower(strings.TrimSpace(line))
 
 			for len(queue) >= len(pattern) {
 				if !foundExactMatch && findIfMissingChar(pattern, queue) { // to avoid counting duplicates
@@ -203,6 +202,6 @@ func main() {
 	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 	fmt.Println("** Total mismatches: ", findNumMisMatches(t2tFilePath, aluFilePath, false))
 
-	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
-	fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath, false))
+	// grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
+	// fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath, false))
 }

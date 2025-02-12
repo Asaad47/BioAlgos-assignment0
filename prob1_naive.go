@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"unicode"
 )
 
 func findNumExactMatches(seqFileName, patternFileName string) int {
@@ -24,7 +23,8 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 		if strings.HasPrefix(line, ">") {
 			fmt.Println("Pattern-- Header:", line)
 		} else {
-			pattern += strings.TrimSpace(line)
+			// pattern += strings.TrimSpace(line)
+			pattern += strings.ToLower(strings.TrimSpace(line))
 		}
 	}
 
@@ -75,13 +75,14 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 			// if headers > 1 {
 			// 	break
 			// }
-			queue += strings.TrimSpace(line)
+			// queue += strings.TrimSpace(line)
+			queue += strings.ToLower(strings.TrimSpace(line))
 			// fmt.Println("line: ", line)
 
 			for len(queue) >= len(pattern) {
 				matched := true
 				for i := 0; i < len(pattern); i++ {
-					if unicode.ToLower(rune(queue[i])) != unicode.ToLower(rune(pattern[i])) {
+					if queue[i] != pattern[i] {
 						matched = false
 						break
 					}
@@ -108,22 +109,22 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 
 func main() {
 	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
-	t2tFilePath2 := "ncbi_dataset_T2T/ncbi_dataset/data/GCF_009914755.1/GCF_009914755.1_T2T-CHM13v2.0_genomic.fna"
-	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
-	grch38FilePath2 := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCF_000001405.40/GCF_000001405.40_GRCh38.p14_genomic.fna"
+	// t2tFilePath2 := "ncbi_dataset_T2T/ncbi_dataset/data/GCF_009914755.1/GCF_009914755.1_T2T-CHM13v2.0_genomic.fna"
+	// grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
+	// grch38FilePath2 := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCF_000001405.40/GCF_000001405.40_GRCh38.p14_genomic.fna"
 	aluFilePath := "DF000000002.fa"
 
-	filePaths := []string{aluFilePath, t2tFilePath, t2tFilePath2, grch38FilePath, grch38FilePath2}
+	// filePaths := []string{aluFilePath, t2tFilePath, t2tFilePath2, grch38FilePath, grch38FilePath2}
 
-	// fmt.Println("*** Total number of matches: ", findNumExactMatches(t2tFilePath, aluFilePath))
-	fileMatchCounts := make(map[string]int)
+	fmt.Println("*** Total number of matches: ", findNumExactMatches(t2tFilePath, aluFilePath))
+	// fileMatchCounts := make(map[string]int)
 
-	for _, seqFilePath := range filePaths {
-		numMatches := findNumExactMatches(seqFilePath, aluFilePath)
-		fileMatchCounts[seqFilePath] = numMatches
-		fmt.Println("*** Sequence file:", seqFilePath)
-		fmt.Println("*** Total number of matches: ", numMatches)
-	}
+	// for _, seqFilePath := range filePaths {
+	// 	numMatches := findNumExactMatches(seqFilePath, aluFilePath)
+	// 	fileMatchCounts[seqFilePath] = numMatches
+	// 	fmt.Println("*** Sequence file:", seqFilePath)
+	// 	fmt.Println("*** Total number of matches: ", numMatches)
+	// }
 
-	fmt.Println("File match counts:", fileMatchCounts)
+	// fmt.Println("File match counts:", fileMatchCounts)
 }
