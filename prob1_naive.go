@@ -50,7 +50,7 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, ">") {
-			fmt.Println("Header:", line)
+			// fmt.Println("Header:", line)
 			start = 0
 			queue = ""
 			chromosome = line
@@ -84,23 +84,33 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 }
 
 func main() {
+	if len(os.Args) == 2 {
+		fmt.Println("Run: go run prob1_naive.go <seq_file>")
+		fmt.Println("<seq_file> = ", os.Args[1])
+
+		aluFilePath := "DF000000002.fa"
+		seqFilePath := os.Args[1]
+		fmt.Println("*** Total number of matches: ", findNumExactMatches(seqFilePath, aluFilePath))
+		return
+	}
+
 	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 	// t2tFilePath2 := "ncbi_dataset_T2T/ncbi_dataset/data/GCF_009914755.1/GCF_009914755.1_T2T-CHM13v2.0_genomic.fna"
-	// grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
+	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
 	// grch38FilePath2 := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCF_000001405.40/GCF_000001405.40_GRCh38.p14_genomic.fna"
 	aluFilePath := "DF000000002.fa"
 
-	// filePaths := []string{aluFilePath, t2tFilePath, t2tFilePath2, grch38FilePath, grch38FilePath2}
+	// fmt.Println("*** Total number of matches: ", findNumExactMatches(grch38FilePath, aluFilePath))
 
-	fmt.Println("*** Total number of matches: ", findNumExactMatches(t2tFilePath, aluFilePath))
-	// fileMatchCounts := make(map[string]int)
+	filePaths := []string{aluFilePath, t2tFilePath, grch38FilePath}
+	fileMatchCounts := make(map[string]int)
 
-	// for _, seqFilePath := range filePaths {
-	// 	numMatches := findNumExactMatches(seqFilePath, aluFilePath)
-	// 	fileMatchCounts[seqFilePath] = numMatches
-	// 	fmt.Println("*** Sequence file:", seqFilePath)
-	// 	fmt.Println("*** Total number of matches: ", numMatches)
-	// }
+	for _, seqFilePath := range filePaths {
+		numMatches := findNumExactMatches(seqFilePath, aluFilePath)
+		fileMatchCounts[seqFilePath] = numMatches
+		fmt.Println("*** Sequence file:", seqFilePath)
+		fmt.Println("*** Total number of matches: ", numMatches)
+	}
 
-	// fmt.Println("File match counts:", fileMatchCounts)
+	fmt.Println("File match counts:", fileMatchCounts)
 }

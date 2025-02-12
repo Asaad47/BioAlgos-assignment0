@@ -195,13 +195,31 @@ func findNumMisMatches(seqFileName, patternFileName string, printHeaders bool) i
 }
 
 func main() {
-	// fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt", true)) // this is for testing
+	if len(os.Args) == 2 {
+		fmt.Println("Run: go run prob2_naive.go <seq_file>")
+		fmt.Println("<seq_file> = ", os.Args[1])
 
-	aluFilePath := "DF000000002.fa"
+		aluFilePath := "DF000000002.fa"
+		seqFilePath := os.Args[1]
+		fmt.Println("*** Total number of matches: ", findNumMisMatches(seqFilePath, aluFilePath, false))
+		return
+	}
+	fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt", true)) // this is for testing
 
 	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
-	fmt.Println("** Total mismatches: ", findNumMisMatches(t2tFilePath, aluFilePath, false))
+	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
+	aluFilePath := "DF000000002.fa"
 
-	// grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
-	// fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath, false))
+	filePaths := []string{aluFilePath, t2tFilePath, grch38FilePath}
+	fileMatchCounts := make(map[string]int)
+
+	for _, seqFilePath := range filePaths {
+		numMatches := findNumMisMatches(seqFilePath, aluFilePath, false)
+		fileMatchCounts[seqFilePath] = numMatches
+		fmt.Println("*** Sequence file:", seqFilePath)
+		fmt.Println("*** Total number of matches: ", numMatches)
+		fmt.Println("-----------------------------------")
+	}
+
+	fmt.Println("File match counts:", fileMatchCounts)
 }
