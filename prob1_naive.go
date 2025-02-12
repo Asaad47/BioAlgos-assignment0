@@ -23,13 +23,9 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 		if strings.HasPrefix(line, ">") {
 			fmt.Println("Pattern-- Header:", line)
 		} else {
-			// pattern += strings.TrimSpace(line)
 			pattern += strings.ToLower(strings.TrimSpace(line))
 		}
 	}
-
-	// fmt.Println("Pattern:", pattern)
-	// fmt.Println("Length of pattern:", len(pattern))
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error reading pattern file:", err)
@@ -46,7 +42,6 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 
 	numMatches := 0
 	chromosome := ""
-	// validChromosome := false
 	start := 0
 	queue := ""
 	headers := 0
@@ -56,28 +51,12 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 		line := scanner.Text()
 		if strings.HasPrefix(line, ">") {
 			fmt.Println("Header:", line)
-			// fmt.Println("-- Number of matches so far:", numMatches)
 			start = 0
 			queue = ""
-			chromosomeParts := strings.Split(line, "chromosome ")
-			if len(chromosomeParts) > 1 {
-				chromosome = chromosomeParts[1]
-				// validChromosome = true
-			} else {
-				chromosome = chromosomeParts[0]
-				// validChromosome = false
-			}
+			chromosome = line
 			headers++
 		} else {
-			// if !validChromosome {
-			// 	continue
-			// }
-			// if headers > 1 {
-			// 	break
-			// }
-			// queue += strings.TrimSpace(line)
 			queue += strings.ToLower(strings.TrimSpace(line))
-			// fmt.Println("line: ", line)
 
 			for len(queue) >= len(pattern) {
 				matched := true
@@ -86,9 +65,6 @@ func findNumExactMatches(seqFileName, patternFileName string) int {
 						matched = false
 						break
 					}
-					// if i > 10 {
-					// 	fmt.Println("reached i: ", i)
-					// }
 				}
 				if matched {
 					numMatches++
