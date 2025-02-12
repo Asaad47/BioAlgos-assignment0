@@ -1,0 +1,37 @@
+Pattern-- Header: >DF000000002.4 AluY
+Match: (chromosome, start, end) = (>DF000000002.4 AluY, -310, 0)
+*** Sequence file: DF000000002.fa
+*** Total number of matches:  1
+Pattern-- Header: >DF000000002.4 AluY
+Match: (chromosome, start, end) = (>CP068276.2 Homo sapiens isolate CHM13 chromosome 2, 186833277, 186833587)
+Match: (chromosome, start, end) = (>CP068271.2 Homo sapiens isolate CHM13 chromosome 7, 39966041, 39966351)
+*** Sequence file: ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna
+*** Total number of matches:  2
+Pattern-- Header: >DF000000002.4 AluY
+Match: (chromosome, start, end) = (>CM000665.2 Homo sapiens chromosome 3, GRCh38 reference primary assembly, 88629832, 88630142)
+Match: (chromosome, start, end) = (>CM000669.2 Homo sapiens chromosome 7, GRCh38 reference primary assembly, 39808489, 39808799)
+Match: (chromosome, start, end) = (>CM000679.2 Homo sapiens chromosome 17, GRCh38 reference primary assembly, 18689763, 18690073)
+*** Sequence file: ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna
+*** Total number of matches:  3
+File match counts: map[DF000000002.fa:1 ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna:3 ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna:2]
+
+
+>>> /usr/bin/time -l go run prob1_kmp.go > out_prob1_kmp.txt
+       38.79 real        37.11 user         2.11 sys
+            53837824  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               15971  page reclaims
+                2611  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+               49683  signals received
+                4355  voluntary context switches
+              245737  involuntary context switches
+           761947930  instructions retired
+           286645793  cycles elapsed
+            13174208  peak memory footprint
