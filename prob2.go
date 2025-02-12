@@ -94,7 +94,7 @@ func findIfMissingChar(pattern, queue string) bool {
 	return out
 }
 
-func findNumMisMatches(seqFileName, patternFileName string) int {
+func findNumMisMatches(seqFileName, patternFileName string, printHeaders bool) int {
 	// Read the pattern from the pattern file
 	pattern := ""
 	patternFile, err := os.Open(patternFileName)
@@ -146,7 +146,9 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, ">") {
-			// fmt.Println("Header:", line)
+			if printHeaders {
+				fmt.Println("Header:", line)
+			}
 			start = 0
 			queue = ""
 			chromosome = line
@@ -185,17 +187,22 @@ func findNumMisMatches(seqFileName, patternFileName string) int {
 		fmt.Println("Error reading sequence file:", err)
 	}
 
+	fmt.Println("** Number of exact matches:", numExactMatches)
+	fmt.Println("** Number of single mismatches:", numSingleMismatches)
+	fmt.Println("** Number of additional character matches:", numAdditionalCharMatches)
+	fmt.Println("** Number of missing character matches:", numMissingCharMatches)
+
 	return numExactMatches + numSingleMismatches + numAdditionalCharMatches + numMissingCharMatches
 }
 
 func main() {
-	// fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt")) // this is for testing
+	// fmt.Println("** Total mismatches: ", findNumMisMatches("ex_sequence.txt", "ex_pattern.txt", true)) // this is for testing
 
 	aluFilePath := "DF000000002.fa"
 
 	t2tFilePath := "ncbi_dataset_T2T/ncbi_dataset/data/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
-	fmt.Println("** Total mismatches: ", findNumMisMatches(t2tFilePath, aluFilePath))
+	fmt.Println("** Total mismatches: ", findNumMisMatches(t2tFilePath, aluFilePath, false))
 
 	grch38FilePath := "ncbi_dataset_GRCh38/ncbi_dataset/data/GCA_000001405.29/GCA_000001405.29_GRCh38.p14_genomic.fna"
-	fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath))
+	fmt.Println("** Total mismatches: ", findNumMisMatches(grch38FilePath, aluFilePath, false))
 }
