@@ -1,8 +1,19 @@
-AABAAC
-ABCABC
-ABCABC
-abcbca
-bcabcc
-abbcab
-cabcab
-cbbbbb
+>> 1 additional & 2 missing
+ABA
+caa
+
+>> 1 exact
+bab
+Caa
+
+>> 1 missing & 1 mis-match
+bab
+cbb
+
+>> 1 mis-match
+cac
+cac
+
+>> 1 missing & 1 exact
+BCA
+BCA

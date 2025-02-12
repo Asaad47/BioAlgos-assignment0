@@ -1,2 +1,2 @@
-ABCABC
-ABCABC
+AB
+cA
