@@ -199,7 +199,7 @@ Single mismatch: (chromosome, start, end) = (>KI270778.1 Homo sapiens chromosome
 
 </details>
 
-For both counts of mismatches, the single addition match is also counted as a single mismatch. I decided against considering this is a duplicate because it's not clear to me if the additional `A` at the end of the single addition match sequence is a part of the original sequence or not, so both counts are reported.
+For both counts of mismatches in files, the single-addition-match is also counted as a single-mismatch. I decided against considering this is a duplicate because it's not clear to me if the additional `A` at the end of the single-addition-match sequence is a part of the original sequence or not, so both counts are reported.
 
 ## Performance analysis
 
