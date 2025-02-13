@@ -10,6 +10,8 @@ For finding exact matches, I used two implementations for searching: naive chara
 
 For finding approximate matches, I seperated the search mechanism to four functions: exact match, single mismatch, single insertion, and single deletion. The exact match is the same as the naive implementation of prob1. The single mismatch resovles to true if the Hamming distance is exactly 1. The single insertion and single deletion look for the first mismatch index and then skip the mismatched character in the `queue` and the pattern respectively. Some additional checks are used to avoid counting duplicates. For example, if there a was an exact match, the single deletion function will not be called as it is a subset of the exact match. Also, the single addition function asserts that the first and last charcaters are the same as the pattern and that the mismatch is in the middle to avoid duplicates.
 
+Note: I have done pattern match searching per header contig in the sequnce file, so when reading a new header, the `queue` and `start` index are reset and the search starts from the beginning of the new contig.
+
 ## Results on AluY
 
 Dropdowns have more information on the results on specified files. The _start_ and _end_ indices are inclusive.
