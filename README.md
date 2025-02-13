@@ -423,6 +423,7 @@ The T2T file is 3.16 GB, and the GRCh38 file is 3.34 GB, so the implementations 
 <details>
 <summary> T2T file has 25 header lines</summary>
 <br>
+
 ```bash
 Header: >CP068277.2 Homo sapiens isolate CHM13 chromosome 1
 Header: >CP068276.2 Homo sapiens isolate CHM13 chromosome 2
@@ -450,11 +451,13 @@ Header: >CP068255.2 Homo sapiens isolate CHM13 chromosome X
 Header: >CP086569.2 Homo sapiens isolate NA24385 chromosome Y
 Header: >CP068254.1 Homo sapiens isolate CHM13 mitochondrion, complete genome
 ```
+
 </details>
 
 <details>
 <summary>The GRCh38 file has 709 headers</summary>
 <br>
+
 ```bash
 Header: >CM000663.2 Homo sapiens chromosome 1, GRCh38 reference primary assembly
 Header: >KI270706.1 Homo sapiens chromosome 1 unlocalized genomic contig, GRCh38 reference primary assembly
@@ -1166,6 +1169,7 @@ Header: >KI270933.1 Homo sapiens chromosome 19 genomic contig, GRCh38 reference 
 Header: >GL000209.2 Homo sapiens chromosome 19 genomic contig, GRCh38 reference assembly alternate locus group ALT_REF_LOCI_35
 Header: >J01415.2 Homo sapiens mitochondrion, complete genome
 ```
+
 </details>
 
 I initially implemented prob1_naive.go in Python, but the implementation took 16 minutes to run on the T2T file. I then implemented the same code in Go, and it took 20 seconds to run. Hence, I made the decision to continue with Go for the rest of the implementations. Interestingly, the Python implementation had a maximum resident set size of 9 MB, which is 5 times less than Go, but I haven't investigated this further. 
