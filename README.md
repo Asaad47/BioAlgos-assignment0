@@ -8,7 +8,7 @@ I have three main files that address the implementation problems: prob1_naive.go
 
 For finding exact matches, I used two implementations for searching: naive character matching and KMP algorithm found in prob1_naive.go and prob1_kmp.go respectively. The naive matching directly compares the characters in the `queue` with the pattern in each iteration while the KMP algorithm pre-computes the border array and uses it to skip unnecessary comparisons. However, both implementations achieved roughly the same performance.
 
-For finding approximate matches, I seperated the search mechanism to four functions: exact match, single mismatch, single insertion, and single deletion. The exact match is the same as the naive implementation of prob1. The single mismatch resovles to true of the Hamming distance is exactly 1. The single insertion and single deletion look for the first mismatch index and then skip the mismatched character in the `queue` and the pattern respectively. Some additional checks are used to avoid counting duplicates. For example, if there a was an exact match, the single deletion function will not be called as it is a subset of the exact match. Also, the single addition function asserts that the first and last charcaters are the same as the pattern and that the mismatch is in the middle to avoid duplicates.
+For finding approximate matches, I seperated the search mechanism to four functions: exact match, single mismatch, single insertion, and single deletion. The exact match is the same as the naive implementation of prob1. The single mismatch resovles to true if the Hamming distance is exactly 1. The single insertion and single deletion look for the first mismatch index and then skip the mismatched character in the `queue` and the pattern respectively. Some additional checks are used to avoid counting duplicates. For example, if there a was an exact match, the single deletion function will not be called as it is a subset of the exact match. Also, the single addition function asserts that the first and last charcaters are the same as the pattern and that the mismatch is in the middle to avoid duplicates.
 
 ## Results on AluY
 
@@ -423,6 +423,7 @@ The T2T file is 3.16 GB, and the GRCh38 file is 3.34 GB, so the implementations 
 <details>
 <summary> T2T file has 25 header lines</summary>
 <br>
+```bash
 Header: >CP068277.2 Homo sapiens isolate CHM13 chromosome 1
 Header: >CP068276.2 Homo sapiens isolate CHM13 chromosome 2
 Header: >CP068275.2 Homo sapiens isolate CHM13 chromosome 3
@@ -448,11 +449,13 @@ Header: >CP068256.2 Homo sapiens isolate CHM13 chromosome 22
 Header: >CP068255.2 Homo sapiens isolate CHM13 chromosome X
 Header: >CP086569.2 Homo sapiens isolate NA24385 chromosome Y
 Header: >CP068254.1 Homo sapiens isolate CHM13 mitochondrion, complete genome
+```
 </details>
 
 <details>
 <summary>The GRCh38 file has 709 headers</summary>
 <br>
+```bash
 Header: >CM000663.2 Homo sapiens chromosome 1, GRCh38 reference primary assembly
 Header: >KI270706.1 Homo sapiens chromosome 1 unlocalized genomic contig, GRCh38 reference primary assembly
 Header: >KI270707.1 Homo sapiens chromosome 1 unlocalized genomic contig, GRCh38 reference primary assembly
@@ -1162,6 +1165,7 @@ Header: >KI270932.1 Homo sapiens chromosome 19 genomic contig, GRCh38 reference 
 Header: >KI270933.1 Homo sapiens chromosome 19 genomic contig, GRCh38 reference assembly alternate locus group ALT_REF_LOCI_34
 Header: >GL000209.2 Homo sapiens chromosome 19 genomic contig, GRCh38 reference assembly alternate locus group ALT_REF_LOCI_35
 Header: >J01415.2 Homo sapiens mitochondrion, complete genome
+```
 </details>
 
 I initially implemented prob1_naive.go in Python, but the implementation took 16 minutes to run on the T2T file. I then implemented the same code in Go, and it took 20 seconds to run. Hence, I made the decision to continue with Go for the rest of the implementations. Interestingly, the Python implementation had a maximum resident set size of 9 MB, which is 5 times less than Go, but I haven't investigated this further. 
